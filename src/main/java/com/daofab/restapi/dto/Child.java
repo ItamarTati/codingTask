@@ -5,6 +5,12 @@ public class Child {
     private int parentId;
     private int paidAmount;
 
+    public Child(int id, int parentId, int paidAmount) {
+        this.id = id;
+        this.parentId = parentId;
+        this.paidAmount = paidAmount;
+    }
+
     public int getId() {
         return id;
     }
