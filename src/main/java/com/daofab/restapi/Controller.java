@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,7 +29,8 @@ public class Controller {
         int pageSize = 2;
         int offset = (page - 1) * pageSize;
         Resource parentResource = new ClassPathResource("Parent.json");
-        JsonNode ParentRootNode = mapper.readTree(parentResource.getFile());
+        InputStream inputStream = parentResource.getInputStream();
+        JsonNode ParentRootNode = mapper.readTree(inputStream);
         JsonNode ParentDataNode = ParentRootNode.get("data");
         CollectionType parentListType = mapper.getTypeFactory().constructCollectionType(List.class, Parent.class);
         List<Parent> parents = mapper.readValue(ParentDataNode.traverse(), parentListType);
@@ -40,13 +41,13 @@ public class Controller {
 
         int endIndex = Math.min(offset + pageSize, parents.size());
         return parents.subList(offset, endIndex);
-
     }
 
     @GetMapping("/children/{parentId}")
     public List<Child> getChildTransactions(@PathVariable int parentId) throws IOException {
-        Resource ChildResource = new ClassPathResource("Child.json");
-        JsonNode ChildRootNode = mapper.readTree(ChildResource.getFile());
+        Resource childResource = new ClassPathResource("Child.json");
+        InputStream inputStream = childResource.getInputStream();
+        JsonNode ChildRootNode = mapper.readTree(inputStream);
         JsonNode ChildDataNode = ChildRootNode.get("data");
         CollectionType childListType = mapper.getTypeFactory().constructCollectionType(List.class, Parent.class);
         List<Child> children = mapper.readValue(ChildDataNode.traverse(), childListType);
@@ -55,6 +56,4 @@ public class Controller {
                 .filter(child -> child.getParentId() == parentId)
                 .collect(Collectors.toList());
     }
-
-
 }
