@@ -5,6 +5,8 @@ public class Child {
     private int parentId;
     private int paidAmount;
 
+    public Child() {}
+
     public Child(int id, int parentId, int paidAmount) {
         this.id = id;
         this.parentId = parentId;

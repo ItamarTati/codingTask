@@ -47,7 +47,7 @@ public class Controller {
         InputStream inputStream = childResource.getInputStream();
         JsonNode ChildRootNode = mapper.readTree(inputStream);
         JsonNode ChildDataNode = ChildRootNode.get("data");
-        CollectionType childListType = mapper.getTypeFactory().constructCollectionType(List.class, Parent.class);
+        CollectionType childListType = mapper.getTypeFactory().constructCollectionType(List.class, Child.class);
         List<Child> children = mapper.readValue(ChildDataNode.traverse(), childListType);
 
         return children.stream()
