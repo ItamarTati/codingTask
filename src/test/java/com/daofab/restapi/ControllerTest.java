@@ -30,11 +30,12 @@ class ControllerTest {
     }
 
     @Test
-    @DisplayName("Get parent transactions with valid page")
-    void getParentTransactionsWithValidPage() throws Exception {
+    @DisplayName("Get parent transactions with valid page and ascending sort")
+    void getParentTransactionsWithValidPageAndAscendingSort() throws Exception {
         request.setParameter("page", "1");
+        request.setParameter("sort", "asc");
 
-        List<Parent> parents = controller.getParentTransactions(1);
+        List<Parent> parents = controller.getParentTransactions(1, "asc");
 
         assertThat(parents.size()).isEqualTo(2);
         assertThat(parents.get(0).getId()).isEqualTo(1);
@@ -42,11 +43,24 @@ class ControllerTest {
     }
 
     @Test
+    @DisplayName("Get parent transactions with valid page and descending sort")
+    void getParentTransactionsWithValidPageAndDescendingSort() throws Exception {
+        request.setParameter("page", "1");
+        request.setParameter("sort", "desc");
+
+        List<Parent> parents = controller.getParentTransactions(1, "desc");
+
+        assertThat(parents.size()).isEqualTo(2);
+        assertThat(parents.get(0).getId()).isEqualTo(7);
+        assertThat(parents.get(1).getId()).isEqualTo(6);
+    }
+
+    @Test
     @DisplayName("Get parent transactions with invalid page")
     void getParentTransactionsWithInvalidPage() throws Exception {
         request.setParameter("page", "100");
 
-        List<Parent> parents = controller.getParentTransactions(100);
+        List<Parent> parents = controller.getParentTransactions(100, "asc");
 
         assertThat(parents).isEmpty();
     }
